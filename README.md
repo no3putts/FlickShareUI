@@ -23,3 +23,7 @@ The application is intended to be deployed as SaaS.   The initial user has abili
 Users will mainly interact with the application using a web browser, and in the future, a mobile application.  The web application will provide a registration page for each new instance of this web application.  The first user becomes the owner/organizer of this instance.  Additional users will be added via an email link sent by the organizer that contains a unique key that has a limited validity time period.  Once registered, each user can add their own videos that they own into the application.
 
 Video information don’t have to be enterer by hand, although an option. They are retrieved via public APIs that can easily be imported into this application.  This will mitigate the daunting task of typing in all the information by hand for hundreds or thousands of videos.
+
+# REST APIs
+
+This project use REST APIs from https://github.com/no3putts/FlickShareService
