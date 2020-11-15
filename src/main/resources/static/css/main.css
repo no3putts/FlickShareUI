@@ -1,0 +1,60 @@
+#mainHeader {
+  color: white;
+}
+#mainHeader .nav-link {
+  font-size: 15px;
+  color: #ffffff;
+}
+a {
+  display: block;
+}
+a:hover {
+  text-shadow: -5px -5px 15px yellow;
+}
+div.box {
+  height: 100px;
+  width: 100px;
+  display: inline-block;
+  margin: 0 10px 0 10px;
+}
+.round {
+  border-radius: 50%;
+  border: none;
+  color: #cc3300;
+  padding: 20px;
+  text-align: center;
+  display: inline-block;
+  font-size: 12px;
+  margin: 0 10px 0 10px;
+  cursor: pointer;
+}
+.page-header {
+  padding-bottom: 9.5px;
+  margin: 42px 0 21px;
+  border-bottom: 1px solid #dddddd;
+}
+#logoFont {
+  font-family: 'Audiowide';
+  font-size: 16px;
+  color: #e78200;
+}
+.spacer {
+  margin-top: 0px;
+}
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: black;
+  color: white;
+  text-align: center;
+  font-size: 11px;
+}
+a[name] {
+  padding-top: 240;
+  margin-top: -340px;
+  vertical-align: top;
+  display: inline-block;
+  /* required for webkit browsers */
+}
