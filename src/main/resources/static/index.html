@@ -1,34 +1,286 @@
 <!DOCTYPE HTML>
 <html>
+
 <head>
-    <title>Flick Share</title>
-    <meta charset="utf-8">
-    <meta name="description" content="Capstone Project for SWDV691">
+   <title>Flick Share</title>
+   <meta charset="utf-8">
+   <meta name="description" content="Capstone Project for SWDV691">
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta name="author" content="Jeremiah Pineda">
-    <link rel="stylesheet" href="css/lux.css">
-  
+   <meta name="author" content="Jeremiah Pineda">
+   <link rel="stylesheet" href="css/lux.css">
+   <link rel="stylesheet" type="text/css" href="css/main.css" />
+
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
 </head>
-<body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top py-0" id="mainHeader">
-       <a class="navbar-brand" href="index">
-       <img role="img" aria-label="Logo of Flick Share" alt="Brand" src="img/logo_main.png">
-       </a>
-       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="true" aria-label="Toggle navigation">
-       <span class="navbar-toggler-icon"></span>
-       </button>
-       <div class="collapse navbar-collapse" id="navbarCollapse" role="navigation" aria-label="Main Menu">
-          <ul class="nav navbar-nav" id="navGlow">
+<body>
+   <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top py-0" id="mainHeader">
+      <a class="navbar-brand" href="index">
+         <img role="img" aria-label="Logo of Flick Share" alt="Brand" src="img/logo_main.png">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+         aria-controls="navbarCollapse" aria-expanded="true" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse" role="navigation" aria-label="Main Menu">
+         <ul class="nav navbar-nav" id="navGlow">
             <li class="nav-item "> <a class="nav-link active" href="index.html" aria-label="Home Page">Home</a></li>
-            <li class="nav-item "> <a class="nav-link active" href="underconstruction.html" aria-label="Help">Help</a></li>
-             <li class="nav-item "> <a class="nav-link active" href="about.html" aria-label="About">About</a></li>
-          </ul>
-       </div>
-      </nav>
+            <li class="nav-item "> <a class="nav-link active" href="underconstruction.html" aria-label="Help">Help</a>
+            </li>
+            <li class="nav-item "> <a class="nav-link active" href="about.html" aria-label="About">About</a></li>
+         </ul>
+      </div>
+   </nav>
+   <div class="container">
+      <div id="content">
+         <div class="page-header">
+            <div class="col-md-9" style="margin-top:110px">
+               <div class="row">
+                  <div class="col-lg-6">
+                     <div class="bs-component">
+                        <form>
+                           <fieldset>
+                              <legend aria-label="Search" id="searchLbl"> Search</legend>
+                              <div class="form-group d-flex" id="apiDiv">
+                                 <input aria-label="Enter a movie tile to search for" aria-labelledby="searchLbl"
+                                    type="text" class="form-control" placeholder="Enter a movie title keyword"
+                                    id="searchInput">
+                                 &nbsp;&nbsp;<button type="button" id="submit" class="btn btn-primary">Search</button>
+                              </div>
+                           </fieldset>
+                           <fieldset class="form-group">
+                              <legend>Movie Source</legend>
+                              <div class="form-check radio-inline">
+                                 <label class="form-check-label radio-inline">
+                                    <input type="radio" class="form-check-input radio-inline" name="sourceRadio" id="omdbRadio" value="omdb" checked="" onclick="clearSearch()">
+                                    Internet
+                                 </label>
+                              </div>
+                              <div class="form-check radio-inline">
+                                 <label class="form-check-label radio-inline">
+                                    <input type="radio" class="form-check-input radio-inline" name="sourceRadio" id="localRadio" value="local" onclick="asteriskSearch()">
+                                    Local Collection <i>(for local search, * for all)</i>
+                                 </label>
+                              </div>
+                           </fieldset>
+                        </form>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         <!-- Use to display Movies -->
+         <div class="invisible" id="omdbId">
+         </div>
+
+         <!-- Use to display Movies --> 
+         <div class="container" id="results">
+         </div>
+
+         <!-- Modal -->
+         <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+               <!-- Modal content-->
+               <div class="modal-content">
+                  <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+                  <div class="modal-body" id="modalBodyDiv">
+                  </div>
+                  <div class="modal-footer">
+                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                     <button type="button" id="addBtn" onClick="addMovie()" class="btn btn-primary" onclick data-dismiss="modal">Add to Collection</button>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         <!-- EDIT Modal -->
+         <div id="editModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+               <!-- Modal content-->
+               <div class="modal-content">
+                  <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+                  <div class="modal-body" id="editModalBodyDiv">
+                  </div>
+                  <div class="form-group">
+                     <label for="reviews">Review this movie</label>
+                     <textarea class="form-control" id="reviews" rows="3"></textarea>
+                  </div>
+                  <div class="modal-footer">
+                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                     <button type="button" id="reserveBtn" onClick="reserve()" class="btn btn-primary" onclick data-dismiss="modal">Reserve</button>
+                     <button type="button" id="commentBtn" onClick="review()" class="btn btn-info" onclick data-dismiss="modal">Save Review</button>
+                     <button type="button" id="deleteBtn" onClick="deleteMovie()" class="btn btn-danger" onclick data-dismiss="modal">Remove</button>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+      </div> <!-- End Content -->
+   </div> <!-- End Container -->
+
+   <script>
+      function clearSearch(){
+         window.document.getElementById("searchInput").value = '';
+      }
+
+      function asteriskSearch(){
+         window.document.getElementById("searchInput").value = '*';
+      }
+
+      // RESERVE BTN CLICKED, using default user admin as user
+     function reserve(){
+        // var omdbId = window.document.getElementById("omdbId").innerHTML;
+        // $.post('https://flick-share-api.herokuapp.com/api/reservation/' + omdbId + '/admin',{omdbId:omdbId,userId:'admin'});
+        alert("Reserve movie function coming soon!!!");
+     }
+
+      function review(){
+         var omdbId = window.document.getElementById("omdbId").innerHTML;
+         $.ajax({
+            url: 'https://flick-share-api.herokuapp.com/api/movie/' + omdbId,
+            method: 'PUT',
+            contentType: 'application/json',
+            data:  document.getElementById("reviews").value,
+         })
+                 .done(function( data ) {
+                    console.log(data);
+                 });
+      }
+
+      function addMovie(){
+         var omdbId = window.document.getElementById("omdbId").innerHTML;
+         $.post('https://flick-share-api.herokuapp.com/api/movie/' + omdbId );
+      }
+
+
+      function deleteMovie(){
+         var omdbId = window.document.getElementById("omdbId").innerHTML;
+         $.ajax({
+            url: 'https://flick-share-api.herokuapp.com/api/movie/' + omdbId,
+            method: 'DELETE'
+         })
+           .done(function( data ) {
+              console.log(data);
+           });
+         $("#submit").click();
+      }
+
+      $(document).ready(function () {
+         $("#searchInput").keypress(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == "13") {
+               event.preventDefault();
+               $("#submit").trigger("click");
+            }
+         });
+
+         $("#submit").click(function (e) {
+            var validate = Validate();
+            $("#results").html(validate);
+            var src = $('input[name=sourceRadio]:checked').val();
+            var param = "?source=omdb";
+
+            if (src != 'omdb')
+               param = "?source=local"
+
+            if (validate.length == 0) {
+               $.ajax({
+                  url: "https://flick-share-api.herokuapp.com/api/movie/title/" + $("#searchInput").val() + param,
+                  type: 'GET',
+                  crossDomain: true,
+                  dataType: "json",
+                  success: function (result, status, xhr) {
+                     var resultHtml = $("<div class=\"row\">");
+                     for (i = 0; i < result.length; i++) {
+                        resultHtml.append("<div class=\"col-sm\" resourceId=\"" + result[i]["imdbID"] + "\">" + "<img  role=\"img\" aria-label=\"" + result[i]["title"] + "\" src=\"" + result[i]["poster"] + "\" alt=\"" + result[i]["title"] + "\" />" + "<p><a>" + result[i]["title"] + "</a></p></div>")
+                     }
+                     resultHtml.append("</div>");
+
+                     $("#results").html(resultHtml);
+                  },
+                  error: function (xhr, status, error) {
+                     $("#results").html("<label aria-label=\"Movie Not Found\">Movie not found</label>")
+                  }
+               });
+            }
+         });
+         // MOVIE POSTER CLICKED
+         $("#results").on("click", ".col-sm",
+           function () {
+              var resourceId = $(this).attr("resourceId");
+              var src = $('input[name=sourceRadio]:checked').val();
+              var param = "?source=omdb";
+              if (src != 'omdb')
+                 param = "?source=local"
+
+              $.ajax({
+                 url: "https://flick-share-api.herokuapp.com/api/movie/" + resourceId + param,
+                 crossDomain: true,
+                 global: false,
+                 type: 'GET',
+                 dataType: 'json',
+                 success: function (result, status, xhr) {
+                    $("#modalTitle").html(result["title"]);
+                    var resultHtml = $("<div omdbId=\"" + result["imdbID"] + "\"><p class=\"text-center\"><img style=\"width: 50%; height: 50%\" src=\"" + result["poster"] + "\"/></p><p>" + result["plot"] + "</p><p>Release Year: " + result["year"] +"</p>"
+                            + "</p><p>Director: " + result["director"] +"</p>"
+                            + "</p><p>Runtime: " + result["runtime"] +"</p></div>"
+                    );
+                     $("#omdbId").html(result["imdbID"]);
+                     $("#reviews").val(result["review"]);
+
+
+                    if (src == 'omdb') {
+                       $("#modalBodyDiv").html(resultHtml);
+                       $("#myModal").modal("show");
+                    }
+                    else {
+                       $("#editModalBodyDiv").html(resultHtml);
+                       $("#editModal").modal("show");
+                    }
+
+                    // $("#modalBodyDiv").html(resultHtml);
+                    // $("#myModal").modal("show");
+
+                 },
+                 error: function (xhr, status, error) {
+                    if (src == 'omdb') {
+                       $("#results").html("<label aria-label=\"Movie Not Found\">Movie not found</label>")
+                    }
+                    else {
+                       $("#results").html("<label aria-label=\"Movie Not in collection \">Movie not in collection</label>")
+                    }
+                 }
+              });
+           });
+
+
+         function Validate() {
+            var errorMessage = "";
+            if ($("#searchInput").val() == "") {
+               errorMessage += "► Enter Search Text";
+            }
+            return errorMessage;
+         }
+      });
+   </script>
+
+   <div class="footer">
+      <p>Company © FlickFinder. All rights reserved</p>
+   </div>
+
 </body>
+
 </html>
