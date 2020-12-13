@@ -127,7 +127,16 @@
                </div>
             </div>
          </div>
-
+         <!-- TOAST-->
+         <div id="toaster" class="toast hide" data-autohide="true" style="position: absolute; top: 20%; right: 40%;" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+               <strong class="mr-auto" ><div id="toasterTitle"></div></strong>
+               <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="toast-body" id="toasterText" ></div>
+         </div>
       </div> <!-- End Content -->
    </div> <!-- End Container -->
 
@@ -142,9 +151,15 @@
 
       // RESERVE BTN CLICKED, using default user admin as user
      function reserve(){
-        // var omdbId = window.document.getElementById("omdbId").innerHTML;
-        // $.post('https://flick-share-api.herokuapp.com/api/reservation/' + omdbId + '/admin',{omdbId:omdbId,userId:'admin'});
-        alert("Reserve movie function coming soon!!!");
+        var omdbId = window.document.getElementById("omdbId").innerHTML;
+        $.post('https://flick-share-api.herokuapp.com/api/reservation/' + omdbId + '/testuser');
+        $('#toaster').toast({
+           delay: 4000
+        });
+        $("#toaster").toast('show');
+        $("#toasterTitle").html('Reservation');
+        $("#toasterText").html('Movie successfully reserved');
+
      }
 
       function review(){
